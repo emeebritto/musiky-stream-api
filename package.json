@@ -1,5 +1,5 @@
 {
-  "name": "musiky-stream-api (youtube-audio-server)",
+  "name": "musiky-stream-api",
   "version": "1.0",
   "main": "src/index.js",
   "scripts": {
