@@ -9,6 +9,12 @@ const app = express()
 function listen (port, callback = () => {}) {
   app.use(nofavicon())
 
+  app.use((req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+  })
+
   app.get('/', (req, res) => {
     res.json({
         title: 'Musiky-Stream-API',
@@ -42,7 +48,7 @@ function listen (port, callback = () => {}) {
       res.sendStatus(500, e)
     }
   })
-
+/*
   app.get('/cache/:videoId', (req, res) => {
     const videoId = req.params.videoId
 
@@ -83,6 +89,7 @@ function listen (port, callback = () => {}) {
       res.json(data)
     })
   })
+*/
 
   app.use((req, res) => {
     res.sendStatus(404)
