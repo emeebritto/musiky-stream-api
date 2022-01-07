@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const express = require('express')
 const nofavicon = require('express-no-favicons')
 const { yellow, green, gray, blue } = require('chalk')
@@ -26,10 +27,11 @@ function listen (port, callback = () => {}) {
     const videoId = req.params.videoId
 
     try {
-      log(`Sending chunk ${blue(videoId)}`)
-      youtube.download({ id: videoId }, (err, { id, file }) => {
-        if (err) return res.sendStatus(500, err)
-        res.sendFile(file)
+      log(`Sending chunk ${blue(videoId)}`);
+      youtube.download({ id: videoId }, async(err, { id, file }) => {
+        if (err) return res.sendStatus(500, err);
+        res.send(await fs.readFileSync(file));
+        fs.unlinkSync(file);
       })
     } catch (e) {
       log(e)
