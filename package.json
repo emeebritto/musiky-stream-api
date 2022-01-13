@@ -2,7 +2,8 @@
   "name": "musiky-stream-api",
   "main": "src/index.js",
   "scripts": {
-    "start": "./src/bin.js"
+    "nodemon": "nodemon",
+    "start": "nodemon -x 'node ./src/bin.js || (sleep 10; touch app.js)'"
   },
   "bin": {
     "yas": "./src/bin.js"
@@ -15,6 +16,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
+    "nodemon": "2.0.15",
     "ora": "^5.4.1",
     "sanitize-filename": "^1.6.3",
     "through2": "^2.0.3",
