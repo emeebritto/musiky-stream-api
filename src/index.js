@@ -41,10 +41,12 @@ function listen (port, callback = () => {}) {
 
   app.get('/:videoId', (req, res) => {
     const videoId = req.params.videoId
+    const videoMode = parseInt(req.query.videoMode);
 
     try {
       log(`Streaming ${yellow(videoId)}`)
-      youtube.stream(videoId).pipe(res)
+      if (videoMode) youtube.videoStream(videoId).pipe(res)
+      if (!videoMode) youtube.stream(videoId).pipe(res)
     } catch (e) {
       log(e)
       res.sendStatus(500, e)
