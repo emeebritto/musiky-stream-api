@@ -158,7 +158,6 @@ class YouTube {
   }
 
   stream (id, useCache) {
-    //ytdl.getInfo(id).then(console.log);
     
     if (useCache) {
       const cached = cache[id]
