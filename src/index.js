@@ -5,6 +5,7 @@ const nofavicon = require('express-no-favicons')
 const { yellow, green, gray, blue } = require('chalk')
 const youtube = require('./youtube')
 const downloader = require('./downloader')
+const whileExistFile = require('./wait');
 const app = express()
 
 function listen (port, callback = () => {}) {
@@ -23,16 +24,21 @@ function listen (port, callback = () => {}) {
     });
   })
 
-  app.get('/chunk/:videoId', (req, res) => {
+  app.get('/chunk/:videoId', async(req, res) => {
     const videoId = req.params.videoId
 
     try {
       log(`Sending chunk ${blue(videoId)}`);
-      youtube.download({ id: videoId }, async(err, { id, file }) => {
-        if (err) return res.sendStatus(500, err);
-        res.send(await fs.readFileSync(file));
-        fs.unlinkSync(file);
-      })
+      const filePath = path.join(__dirname, `../${videoId}.mp3`);
+      if (fs.existsSync(filePath)) {
+        res.send(fs.readFileSync(filePath));
+      } else {
+        youtube.download({ id: videoId }, async(err, { id, file }) => {
+          if (err) return res.sendStatus(500, err);
+          res.send(await fs.readFileSync(file));
+          //fs.unlinkSync(file);
+        })
+      }
     } catch (e) {
       log(e)
       res.sendStatus(500, e)

@@ -184,6 +184,7 @@ class YouTube {
 
   writeFile ({ file, stream }) {
     return new Promise((resolve, reject) => {
+      console.log(file);
       const fileWriter = fs.createWriteStream(file)
       fileWriter.on('finish', () => {
         fileWriter.end()
@@ -206,19 +207,22 @@ class YouTube {
     }
 
     // Without metadata.
-    file =
-      file || id.match(/^http.*/)
-        ? `${this.audioFolder}/youtube-audio.mp3`
-        : `${this.audioFolder}/${id}.mp3`
-    spinner.start('Save audio')
+    const tempFile = `${this.audioFolder}/${id}-temp.mp3`;
+    file = `${this.audioFolder}/${id}.mp3`;
+    spinner.start('Save audio');
     try {
       await this.writeFile({
-        file,
+        file: tempFile,
         stream: await this.stream(id, useCache, addMetadata)
-      })
-      spinner.succeed('Audio saved')
-      console.log(`  ${gray(file)}`)
-      callback(null, { id, file })
+      });
+      spinner.succeed('Audio saved');
+      if (!fs.existsSync(file)) {
+        fs.renameSync(tempFile, file);
+      } else {
+        fs.unlinkSync(tempFile);
+      };
+      console.log(`  ${gray(file)}`);
+      callback(null, { id, file });
     } catch (error) {
       spinner.fail('Error saving audio', error.toString())
       callback(error)
