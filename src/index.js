@@ -1,15 +1,16 @@
-const path = require('path')
-const fs = require('fs')
-const express = require('express')
-const nofavicon = require('express-no-favicons')
-const { yellow, green, gray, blue } = require('chalk')
-const youtube = require('./youtube')
-const downloader = require('./downloader')
+const path = require('path');
+const fs = require('fs');
+const express = require('express');
+const nofavicon = require('express-no-favicons');
+const { yellow, green, gray, blue } = require('chalk');
+const youtube = require('./youtube');
+const pinterest = require('./pinterest')
+const downloader = require('./downloader');
 const whileExistFile = require('./wait');
-const app = express()
+const app = express();
 
 function listen (port, callback = () => {}) {
-  app.use(nofavicon())
+  app.use(nofavicon());
 
   app.use((req, res, next) => {
     res.set('Access-Control-Allow-Origin', '*');
@@ -46,13 +47,21 @@ function listen (port, callback = () => {}) {
   })
 
   app.get('/:videoId', (req, res) => {
-    const videoId = req.params.videoId
+    const videoId = req.params.videoId;
     const videoMode = parseInt(req.query.videoMode);
-
+    const source = req.query.source;
     try {
+      if (source === 'pr') {
+        log(`Streaming ${yellow(videoId)}`)
+        videoMode
+          ? pinterest.videoStream({id: videoId, output: res})
+          : res.status(404).send()
+        return;
+      }
       log(`Streaming ${yellow(videoId)}`)
-      if (videoMode) youtube.videoStream(videoId).pipe(res)
-      if (!videoMode) youtube.stream(videoId).pipe(res)
+      videoMode
+        ? youtube.videoStream(videoId).pipe(res)
+        : youtube.stream(videoId).pipe(res)
     } catch (e) {
       log(e)
       res.sendStatus(500, e)
