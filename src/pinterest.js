@@ -6,6 +6,6 @@ module.exports = {
       url:`https://v.pinimg.com/videos/mc/720p/${id.replace(/:/ig,'/')}.mp4`,
       method:'GET',
       responseType: 'stream'
-    }).then(media => media.data.pipe(output))
+    }).then(media => media.data.pipe(output)).catch(err => console.error(err))
 	}
 }

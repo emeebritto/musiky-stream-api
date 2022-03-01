@@ -58,10 +58,13 @@ function listen (port, callback = () => {}) {
           : res.status(404).send()
         return;
       }
-      log(`Streaming ${yellow(videoId)}`)
-      videoMode
-        ? youtube.videoStream(videoId).pipe(res)
-        : youtube.stream(videoId).pipe(res)
+      if (source === 'yt') {
+        log(`Streaming ${yellow(videoId)}`)
+        videoMode
+          ? youtube.videoStream(videoId).pipe(res)
+          : youtube.stream(videoId).pipe(res)
+        return;
+      }
     } catch (e) {
       log(e)
       res.sendStatus(500, e)
