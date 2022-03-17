@@ -1,13 +1,13 @@
 const path = require('path');
 const fs = require('fs');
-const express = require('express');
 const nofavicon = require('express-no-favicons');
 const { yellow, green, gray, blue } = require('chalk');
 const youtube = require('./youtube');
 const pinterest = require('./pinterest')
 const downloader = require('./downloader');
 const whileExistFile = require('./wait');
-const app = express();
+const { httpsServer, io, app } = require('../app');
+
 
 function listen (port, callback = () => {}) {
   app.use(nofavicon());
@@ -15,6 +15,7 @@ function listen (port, callback = () => {}) {
   app.use((req, res, next) => {
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Headers', 'Content-Type');
+    req.io = io;
     next();
   })
 
@@ -117,7 +118,7 @@ function listen (port, callback = () => {}) {
     res.sendStatus(404)
   })
 
-  app.listen(port, callback)
+  httpsServer.listen(port, callback)
 }
 
 function log () {
