@@ -12,12 +12,14 @@ radio.init(io);
 
 io.on('connection', (socket) => {
   console.log(`id ${socket.id} conectado.`)
-  socket.on("connect-radio", radioId => {
-  	socket.join(radioId);
-  	socket.emit("update-channel", radio.syncRadio(radioId));
-  	console.log(`${socket.id} conectado na radio ${radioId}`);
+  socket.on("connect-media", mediaId => {
+    if (radio.isActive(mediaId)) {
+      socket.join(mediaId);
+      socket.emit("update-channel", radio.syncRadio(mediaId));
+      console.log(`${socket.id} conectado na radio ${mediaId}`);      
+    }
   })
-  socket.on("disconnect-radio", () => {
+  socket.on("disconnect-media", () => {
     socket.disconnect();
     console.log(`${socket.id} desconectou`);
   })

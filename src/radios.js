@@ -8,11 +8,11 @@ const getRandomSong = async() => {
 };
 
 const radioChannels = {
-	ch43: {
+	ws_ch43: {
 		startedAt: 16742342342,
 		media: null
 	},
-	ch13: {
+	ws_ch13: {
 		startedAt: 16742384242,
 		media: null
 	}
@@ -45,6 +45,10 @@ const init = async(io) => {
 	}
 };
 
+const isActive = mediaId => {
+	return !!radioChannels[mediaId];
+};
 
 
-module.exports = { init, syncRadio };
+
+module.exports = { init, syncRadio, isActive };
