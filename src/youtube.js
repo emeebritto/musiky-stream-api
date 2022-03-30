@@ -164,22 +164,24 @@ class YouTube {
       if (cached) return cached
     }
 
-    const video = ytdl(id)
-    const ffmpeg = new Ffmpeg(video)
-    const stream = through2()
+    const audio = ytdl(id, { filter: "audioonly" })
+//    const video = ytdl(id)
+//    const ffmpeg = new Ffmpeg(video)
+//    const stream = through2()
 
-    try {
-      const ffmpegObj = ffmpeg.format('mp3').on('end', () => {
-        cache[id] = null
-        ffmpeg.kill()
-      })
-      ffmpegObj.pipe(stream, { end: true })
+//    try {
+//      const ffmpegObj = ffmpeg.format('mp3').on('end', () => {
+//        cache[id] = null
+//        ffmpeg.kill()
+//      })
+//      ffmpegObj.pipe(stream, { end: true })
 
-      cache[id] = stream
-      return stream
-    } catch (e) {
-      throw e
-    }
+//      cache[id] = stream
+//      return stream
+    return audio
+//    } catch (e) {
+//      throw e
+//    }
   }
 
   writeFile ({ file, stream }) {
