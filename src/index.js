@@ -51,6 +51,7 @@ function listen (port, callback = () => {}) {
     const videoId = req.params.videoId;
     const videoMode = parseInt(req.query.videoMode);
     const source = req.query.source;
+    const format = req.query.format;
     try {
       if (source === 'pr') {
         log(`Streaming ${yellow(videoId)}`)
@@ -60,10 +61,14 @@ function listen (port, callback = () => {}) {
         return;
       }
       if (source === 'yt') {
+        if (!videoMode && format === 'mp3') {
+          youtube.stream(videoId).pipe(res)
+          return;
+        }
         log(`Streaming ${yellow(videoId)}`)
         videoMode
           ? youtube.videoStream(videoId).pipe(res)
-          : youtube.stream(videoId).pipe(res)
+          : youtube.audioStream(videoId).pipe(res)
         return;
       }
     } catch (e) {
