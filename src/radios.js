@@ -3,8 +3,8 @@ const moment = require('moment');
 let IO_INSTANCE = null;
 
 const getRandomSong = async() => {
-	return axios.get(`https://cdn-istatics.herokuapp.com/music/all?random=1&maxResult=1`)
-		.then(res => res.data.items[0]);
+	return axios.get(`https://cdn-istatics.herokuapp.com/musics?random=1&maxResult=1`)
+		.then(res => res.data[0]);
 };
 
 const radioChannels = {

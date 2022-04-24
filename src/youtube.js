@@ -158,11 +158,10 @@ class YouTube {
   }
 
   audioStream(id) {
-    return ytdl(id, { filter: "audioonly" })
+    return ytdl(id, { filter: "audioonly" });      
   }
 
-  stream (id, useCache) {
-    
+  stream(id, useCache) {
     if (useCache) {
       const cached = cache[id]
       if (cached) return cached
