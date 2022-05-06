@@ -1,0 +1,19 @@
+[
+	{
+		"id": "ws_ch67",
+		"name": "Radio 24/7",
+		"media": {
+			"data": null,
+			"startedAt": 0,
+			"startIn": 0
+		}
+	},{
+		"id": "ws_ch13",
+		"name": "Radio 100% ON",
+		"media": {
+			"data": null,
+			"startedAt": 0,
+			"startIn": 0
+		}
+	}
+]
