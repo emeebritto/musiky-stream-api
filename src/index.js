@@ -7,10 +7,11 @@ const pinterest = require('./pinterest')
 const downloader = require('./downloader');
 const whileExistFile = require('./wait');
 const { httpsServer, io, app } = require('../app');
-
+const cors = require('cors');
 
 function listen (port, callback = () => {}) {
   app.use(nofavicon());
+  app.use(cors({ origin: "*" }));
 
   app.use((req, res, next) => {
     res.set('Access-Control-Allow-Origin', '*');
