@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { white, yellow, gray, red } = require('chalk')
-const ytdl = require('ytdl-core')
+const ytdl = require('./libs/ytdl-core')
 const YtNode = require('youtube-node')
 const through2 = require('through2')
 const Ffmpeg = require('fluent-ffmpeg')
