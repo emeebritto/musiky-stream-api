@@ -1,9 +1,11 @@
 const axios = require('axios');
 const moment = require('moment');
+const { istaticsUrl } = require('./consts');
+
 let IO_INSTANCE = null;
 
 const getRandomSong = async() => {
-	return axios.get(`https://cdn-istatics.herokuapp.com/musics?random=1&maxResult=1`)
+	return axios.get(`${istaticsUrl}/musics?random=1&maxResult=1`)
 		.then(res => res.data[0]);
 };
 

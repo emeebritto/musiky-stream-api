@@ -1,6 +1,7 @@
 const moment = require('moment');
 const tunes = require('./tunes.json');
 const { sleep, requestRandomMedia } = require('../helpers');
+const { istaticsUrl } = require('../consts');
 
 
 class RadioCore {
@@ -60,9 +61,9 @@ class RadioCore {
 		mediaData.title = this.tunes[tuneIndex].name;
 		mediaData.artists = [{ name: "Musiky" }];
 		mediaData.thumbnails = [
-			{ url: "https://cdn-istatics.herokuapp.com/static/imgs/illustrations/headphones-abstract-colorful.webp" },
-			{ url: "https://cdn-istatics.herokuapp.com/static/imgs/illustrations/headphones-abstract-colorful.webp" },
-			{ url: "https://cdn-istatics.herokuapp.com/static/imgs/illustrations/headphones-abstract-colorful.webp" }
+			{ url: `${istaticsUrl}/static/imgs/illustrations/headphones-abstract-colorful.webp` },
+			{ url: `${istaticsUrl}/static/imgs/illustrations/headphones-abstract-colorful.webp` },
+			{ url: `${istaticsUrl}/static/imgs/illustrations/headphones-abstract-colorful.webp` }
 		]
 
 		this.tunes[tuneIndex].media.startedAt = moment().unix();
