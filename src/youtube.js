@@ -1,15 +1,15 @@
-const fs = require('fs')
-const path = require('path')
+// const YtNode = require('youtube-node')
+// const Ffmpeg = require('fluent-ffmpeg')
+// const download = require('download')
+// const mkdirp = require('mkdirp')
 const { white, yellow, gray, red } = require('chalk')
-const ytdl = require('ytdl-core')
-const YtNode = require('youtube-node')
-const through2 = require('through2')
-const Ffmpeg = require('fluent-ffmpeg')
-const download = require('download')
 const sanitize = require('sanitize-filename')
+const through2 = require('through2')
+const ytdl = require('ytdl-core')
+const path = require('path')
 const ora = require('ora')
+const fs = require('fs')
 const spinner = ora()
-const mkdirp = require('mkdirp')
 const cache = {}
 
 class YouTube {
@@ -17,141 +17,141 @@ class YouTube {
     this.pageSize = 10
     this.audioFolder = path.resolve('.')
 
-    const envApiKey = process.env.KEY
-    if (envApiKey) this.setKey(envApiKey)
+    // const envApiKey = process.env.KEY
+    // if (envApiKey) this.setKey(envApiKey)
   }
 
-  setFolder(folder) {
-    try {
-      mkdirp.sync(folder)
-      console.log('Using audio folder:', folder)
-      this.audioFolder = folder
-    } catch (error) {
-      console.log(`Error creating folder: ${folder}`, error)
-    }
-  }
+  // setFolder(folder) {
+  //   try {
+  //     mkdirp.sync(folder)
+  //     console.log('Using audio folder:', folder)
+  //     this.audioFolder = folder
+  //   } catch (error) {
+  //     console.log(`Error creating folder: ${folder}`, error)
+  //   }
+  // }
 
-  setKey (apiKey) {
-    this.ytNode = new YtNode()
-    this.ytNode.setKey(apiKey)
-  }
+  // setKey (apiKey) {
+  //   this.ytNode = new YtNode()
+  //   this.ytNode.setKey(apiKey)
+  // }
 
-  streamDownloaded (id, callback) {
-    const video = ytdl(id)
-    const ffmpeg = new Ffmpeg(video)
-    let sent = false
+  // streamDownloaded (id, callback) {
+  //   const video = ytdl(id)
+  //   const ffmpeg = new Ffmpeg(video)
+  //   let sent = false
 
-    try {
-      const file = `${this.audioFolder}/${id}.mp3`
-      ffmpeg
-        .format('mp3')
-        .on('end', () => {
-          ffmpeg.kill()
-        })
-        .on('data', () => {
-          if (sent) return
-          sent = true
-          callback(fs.createReadStream(file))
-        })
-        .save(file)
-    } catch (e) {
-      throw e
-    }
-  }
+  //   try {
+  //     const file = `${this.audioFolder}/${id}.mp3`
+  //     ffmpeg
+  //       .format('mp3')
+  //       .on('end', () => {
+  //         ffmpeg.kill()
+  //       })
+  //       .on('data', () => {
+  //         if (sent) return
+  //         sent = true
+  //         callback(fs.createReadStream(file))
+  //       })
+  //       .save(file)
+  //   } catch (e) {
+  //     throw e
+  //   }
+  // }
 
-  async getMetadata (id) {
-    const { videoDetails } = await ytdl.getBasicInfo(id)
-    const {
-      videoId,
-      title,
-      description,
-      // thumbnails,
-      video_url,
-      media
-    } = videoDetails
-    // const imgUrl = thumbnails?.length ? thumbnails[0]?.url : ''
-    const imgUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`
-    const { song, category, artist, album } = media || {}
-    console.log(`${white('ᐧ Title:')} ${yellow(title)}`)
+  // async getMetadata (id) {
+  //   const { videoDetails } = await ytdl.getBasicInfo(id)
+  //   const {
+  //     videoId,
+  //     title,
+  //     description,
+  //     // thumbnails,
+  //     video_url,
+  //     media
+  //   } = videoDetails
+  //   // const imgUrl = thumbnails?.length ? thumbnails[0]?.url : ''
+  //   const imgUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`
+  //   const { song, category, artist, album } = media || {}
+  //   console.log(`${white('ᐧ Title:')} ${yellow(title)}`)
 
-    return {
-      videoId,
-      title,
-      description,
-      song,
-      category,
-      artist,
-      album,
-      videoUrl: video_url,
-      imgUrl
-    }
-  }
+  //   return {
+  //     videoId,
+  //     title,
+  //     description,
+  //     song,
+  //     category,
+  //     artist,
+  //     album,
+  //     videoUrl: video_url,
+  //     imgUrl
+  //   }
+  // }
 
-  setNonEmptyMetadataProp (ffmpeg, prop, value) {
-    if (!value) return
-    ffmpeg.outputOptions('-metadata', `${prop}="${value}"`)
-  }
+  // setNonEmptyMetadataProp (ffmpeg, prop, value) {
+  //   if (!value) return
+  //   ffmpeg.outputOptions('-metadata', `${prop}="${value}"`)
+  // }
 
-  setMetadata ({ file, id, metadata }) {
-    return new Promise(async (resolve, reject) => {
-      const ffmpeg = new Ffmpeg(file)
-      const tmpFile = `${file}.tmp.mp3`
-      const {
-        videoId,
-        title,
-        description,
-        artist,
-        album,
-        videoUrl,
-        imgUrl
-      } = metadata
+  // setMetadata ({ file, id, metadata }) {
+  //   return new Promise(async (resolve, reject) => {
+  //     const ffmpeg = new Ffmpeg(file)
+  //     const tmpFile = `${file}.tmp.mp3`
+  //     const {
+  //       videoId,
+  //       title,
+  //       description,
+  //       artist,
+  //       album,
+  //       videoUrl,
+  //       imgUrl
+  //     } = metadata
 
-      this.setNonEmptyMetadataProp(ffmpeg, 'title', title)
-      this.setNonEmptyMetadataProp(ffmpeg, 'description', description)
-      this.setNonEmptyMetadataProp(ffmpeg, 'artist', artist)
-      this.setNonEmptyMetadataProp(ffmpeg, 'album', album)
-      this.setNonEmptyMetadataProp(ffmpeg, 'comment', videoUrl)
+  //     this.setNonEmptyMetadataProp(ffmpeg, 'title', title)
+  //     this.setNonEmptyMetadataProp(ffmpeg, 'description', description)
+  //     this.setNonEmptyMetadataProp(ffmpeg, 'artist', artist)
+  //     this.setNonEmptyMetadataProp(ffmpeg, 'album', album)
+  //     this.setNonEmptyMetadataProp(ffmpeg, 'comment', videoUrl)
 
-      // Save and set art.
-      const imgFile = `${this.audioFolder}/${videoId}.jpg`
-      if (imgUrl) {
-        try {
-          spinner.start('Download art')
-          await this.writeFile({
-            file: imgFile,
-            stream: download(imgUrl, { retry: 3 })
-          })
-          spinner.succeed('Art downloaded')
-          spinner.start('Set art metadata')
-          ffmpeg
-            .addInput(imgFile)
-            .outputOptions('-map', '0:0')
-            .outputOptions('-map', '1:0')
-            .outputOptions('-codec', 'copy')
-            .outputOptions('-id3v2_version', '3')
-            .save(tmpFile)
-        } catch (error) {
-          const errMessage = 'Error setting art metadata'
-          spinner.fail(errMessage, error)
-          reject(errMessage)
-        }
-      }
+  //     // Save and set art.
+  //     const imgFile = `${this.audioFolder}/${videoId}.jpg`
+  //     if (imgUrl) {
+  //       try {
+  //         spinner.start('Download art')
+  //         await this.writeFile({
+  //           file: imgFile,
+  //           stream: download(imgUrl, { retry: 3 })
+  //         })
+  //         spinner.succeed('Art downloaded')
+  //         spinner.start('Set art metadata')
+  //         ffmpeg
+  //           .addInput(imgFile)
+  //           .outputOptions('-map', '0:0')
+  //           .outputOptions('-map', '1:0')
+  //           .outputOptions('-codec', 'copy')
+  //           .outputOptions('-id3v2_version', '3')
+  //           .save(tmpFile)
+  //       } catch (error) {
+  //         const errMessage = 'Error setting art metadata'
+  //         spinner.fail(errMessage, error)
+  //         reject(errMessage)
+  //       }
+  //     }
 
-      ffmpeg.on('end', () => {
-        try {
-          fs.unlinkSync(file)
-          fs.unlinkSync(imgFile)
-          fs.renameSync(tmpFile, file)
-          spinner.succeed('Art saved as metadata')
-          resolve(ffmpeg)
-        } catch (error) {
-          const errMessage = 'Error removing temp files'
-          spinner.fail(errMessage, error)
-          reject(errMessage)
-        }
-      })
-    })
-  }
+  //     ffmpeg.on('end', () => {
+  //       try {
+  //         fs.unlinkSync(file)
+  //         fs.unlinkSync(imgFile)
+  //         fs.renameSync(tmpFile, file)
+  //         spinner.succeed('Art saved as metadata')
+  //         resolve(ffmpeg)
+  //       } catch (error) {
+  //         const errMessage = 'Error removing temp files'
+  //         spinner.fail(errMessage, error)
+  //         reject(errMessage)
+  //       }
+  //     })
+  //   })
+  // }
 
   videoStream(id) {
     return ytdl(id);
@@ -172,7 +172,8 @@ class YouTube {
     }
 
     const video = ytdl(id)
-    const ffmpeg = new Ffmpeg(video)
+    throw new Error("available function")
+    // const ffmpeg = new Ffmpeg(video)
     const stream = through2()
     try {
       const ffmpegObj = ffmpeg.format('mp3').on('end', () => {
@@ -183,7 +184,6 @@ class YouTube {
 
       cache[id] = stream
       return stream
-    return audio
     } catch (e) {
       throw e
     }

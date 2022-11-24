@@ -3,7 +3,8 @@
   "main": "src/index.js",
   "scripts": {
     "nodemon": "nodemon",
-    "start": "nodemon -x 'node ./src/bin.js || (sleep 5; touch app.js)'"
+    "old": "nodemon -x 'node ./src/bin.js || (sleep 5; touch app.js)'",
+    "start": "node index.js"
   },
   "bin": {
     "yas": "./src/bin.js"
