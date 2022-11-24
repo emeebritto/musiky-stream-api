@@ -161,6 +161,10 @@ class YouTube {
     return ytdl(id, { filter: "audioonly" });      
   }
 
+  streamInfor(id) {
+    return ytdl.getInfo(id);
+  }
+
   stream(id, useCache) {
     if (useCache) {
       const cached = cache[id]
