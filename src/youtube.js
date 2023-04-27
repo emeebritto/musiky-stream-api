@@ -1,10 +1,10 @@
 // const YtNode = require('youtube-node')
-// const Ffmpeg = require('fluent-ffmpeg')
 // const download = require('download')
 // const mkdirp = require('mkdirp')
 const { white, yellow, gray, red } = require('chalk')
 const sanitize = require('sanitize-filename')
 const through2 = require('through2')
+const Ffmpeg = require('fluent-ffmpeg')
 const ytdl = require('ytdl-core')
 const path = require('path')
 const ora = require('ora')
@@ -172,8 +172,8 @@ class YouTube {
     }
 
     const video = ytdl(id)
-    throw new Error("available function")
-    // const ffmpeg = new Ffmpeg(video)
+    // throw new Error("available function")
+    const ffmpeg = new Ffmpeg(video)
     const stream = through2()
     try {
       const ffmpegObj = ffmpeg.format('mp3').on('end', () => {

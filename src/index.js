@@ -51,7 +51,7 @@ function listen (port, callback = () => {}) {
   })
 
   app.get('/:videoId', (req, res) => {
-    return res.json({ msg: "this route is available (reason: internal limit)" })
+    // return res.json({ msg: "this route is available (reason: internal limit)" })
     const videoId = req.params.videoId;
     const videoMode = parseInt(req.query.videoMode);
     const source = req.query.source;
